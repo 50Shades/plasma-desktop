@@ -166,14 +166,12 @@ void LeaveModel::updateModel()
         }
     }
 
-    /*
     // Switch User
     if (KDisplayManager().isSwitchable() && KAuthorized::authorize(QLatin1String("switch_user")))  {
         QStandardItem *switchUserOption = createStandardItem("leave:/switch");
         switchUserOption->setData(session, Kickoff::GroupNameRole);
         appendRow(switchUserOption);
     }
-    */
 
     // System Options
 
@@ -181,7 +179,9 @@ void LeaveModel::updateModel()
     const QString system = i18n("System");
     QSet< Solid::PowerManagement::SleepState > spdMethods = Solid::PowerManagement::supportedSleepStates();
 
-    if (canLogout){
+    const bool canSuspend = KAuthorized::authorizeKAction("suspend") && KAuthorized::authorize("suspend");
+
+    if (canSuspend){
         if (spdMethods.contains(Solid::PowerManagement::StandbyState)) {
             QStandardItem *standbyOption = createStandardItem("leave:/standby");
             standbyOption->setData(system, Kickoff::GroupNameRole);
